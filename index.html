@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Found // Personal Log — Amethyst Lattice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0a000f" />
+<style>
+  :root{
+    --bg:#000; --fg:#efe7ff; --mut:#cdb8ff; --fx:#b5179e; --fx2:#6f2dbd;
+    --crack:#6b21a8; --blood:#7e124a;
+  }
+  /* Optional ULTRAKILL font if you already host it at /fonts/ULTRAKILL.ttf */
+  @font-face{font-family:"ULTRAKILL";src:url("./fonts/ULTRAKILL.ttf") format("truetype");font-display:swap}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;min-height:100vh;background:#000;color:var(--fg);
+    font:15px/1.65 ULTRAKILL,system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif}
+  .bg{
+    position:fixed; inset:0; z-index:-3;
+    background:
+      radial-gradient(circle at 25% -10%, #2d0036 0%, #0a000f 55%, #000 100%),
+      radial-gradient(ellipse at 80% 80%, rgba(181,23,158,.10), transparent 42%);
+  }
+  /* shattered space layers */
+  .fracture{
+    position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.5;
+    background:
+      repeating-conic-gradient(from 7deg at 40% 30%, rgba(111,45,189,.07) 0 15deg, transparent 15.2deg 30deg),
+      repeating-linear-gradient( 12deg, rgba(181,23,158,.06) 0 40px, transparent 40.5px 80px);
+    mix-blend-mode:screen;
+  }
+  .vignette::after{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:radial-gradient(circle at 50% 50%, transparent 45%, rgba(0,0,0,.55) 80%, rgba(0,0,0,.9) 100%);
+  }
+  .crt::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:2;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 2px, rgba(0,0,0,0) 2px 4px);
+    mix-blend-mode:overlay; opacity:.32; animation:flicker 6s steps(10) infinite;
+  }
+  @keyframes flicker{0%,100%{opacity:.36}50%{opacity:.26}}
+
+  .wrap{max-width:920px; margin:0 auto; padding:22px}
+  header{margin-top:8vh; text-align:center}
+  h1{margin:0; font-size:clamp(26px,5vw,54px); letter-spacing:.06em; text-shadow:0 0 18px rgba(255,0,255,.18)}
+  .sub{color:#ead6ffcc; margin-top:6px; font-size:13px}
+
+  .shard{
+    margin-top:18px; position:relative;
+    border:1px solid #5c0a5b; background:#06000acc; color:var(--fg);
+    border-radius:18px; padding:16px;
+    filter:url(#distort);
+    box-shadow:0 0 26px rgba(181,23,158,.18), inset 0 0 28px rgba(111,45,189,.12);
+  }
+  .topbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px}
+  .traffic{display:flex; gap:6px}
+  .dot{width:12px; height:12px; border-radius:50%; opacity:.85}
+  .r{background:#ef4444cc}.y{background:#f59e0bcc}.g{background:#22c55ecc}
+  .term{letter-spacing:.18em; text-transform:uppercase; font-size:10px; color:#e6c6ff99}
+  .btn{border:1px solid #5c0a5b; color:#f7eaff; background:transparent; border-radius:10px; padding:6px 10px; cursor:pointer}
+  .btn:hover{background:#b5179e33; border-color:#d96ae8}
+
+  .cracks{
+    position:absolute; inset:0; pointer-events:none; border-radius:18px; overflow:hidden;
+  }
+  .cracks::before, .cracks::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient( 12deg, transparent 0 47%, rgba(107,33,168,.65) 48%, transparent 51%) 0 0 / 100% 100%,
+      linear-gradient(-17deg, transparent 0 63%, rgba(107,33,168,.55) 64%, transparent 67%) 0 0 / 100% 100%;
+    mix-blend-mode:screen; opacity:.22;
+  }
+  .cracks::after{
+    transform:scale(1.03); filter:blur(0.6px);
+    background:
+      linear-gradient( -7deg, transparent 0 61%, rgba(190,24,93,.55) 62%, transparent 66%) 0 0 / 100% 100%,
+      linear-gradient( 21deg, transparent 0 73%, rgba(168,85,247,.45) 74%, transparent 77%) 0 0 / 100% 100%;
+    opacity:.18;
+  }
+
+  .title{font-size:18px; color:#f6c1ff; letter-spacing:.03em}
+  .stamp{font-size:11px; color:#cdb0ffaa}
+  .hr{height:1px; margin:10px 0; background:linear-gradient(90deg, transparent, #5c0a5b, transparent)}
+  .log{white-space:pre-wrap; font-size:15px}
+  .line{margin:10px 0; position:relative}
+  .line.glitch{animation:noise 3.6s infinite ease-in-out}
+  @keyframes noise {
+    0%{transform:translateX(0)} 8%{transform:translateX(-0.8px)}
+    12%{transform:translateX(0.6px)} 18%{transform:translateX(-0.4px)}
+    24%{transform:translateX(0.3px)} 30%{transform:translateX(0)}
+  }
+  .scream{color:#ffd1e1; text-shadow:0 0 18px rgba(255,0,128,.25)}
+  .aside{color:#d9c7ff99; font-size:13px; letter-spacing:.02em}
+
+  .footer{color:#a98eea; text-align:center; font-size:12px; margin:26px 0}
+
+  /* big unmute overlay */
+  .gate{
+    position:fixed; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.7);
+    z-index:5; backdrop-filter:blur(2px);
+  }
+  .gate .card{
+    border:1px solid #5c0a5b; background:#0a000f; border-radius:14px; padding:16px;
+    text-align:center; box-shadow:0 0 26px rgba(181,23,158,.24)
+  }
+  .gate .card h2{margin:6px 0 4px 0}
+  .gate .card p{margin:0 0 10px 0; color:#ead6ffcc; font-size:13px}
+  .gate .primary{border:1px solid #9333ea; background:rgba(147,51,234,.16)}
+  .gate .primary:hover{background:rgba(147,51,234,.25)}
+</style>
+</head>
+<body class="crt vignette">
+  <!-- SVG filter for broken displacement -->
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="distort">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.02" numOctaves="2" seed="12" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="B"/>
+    </filter>
+  </svg>
+
+  <div class="bg"></div>
+  <div class="fracture"></div>
+
+  <!-- Unmute gate -->
+  <div id="gate" class="gate">
+    <div class="card">
+      <h2>detached log segment</h2>
+      <p>This shard is off the main lattice. Tap to unmute and load it.</p>
+      <button id="playBtn" class="btn primary">unmute - play</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <h1>Found // Personal Log</h1>
+      <div class="sub">Recovered from the amethyst lattice - unindexed - cracked origin</div>
+    </header>
+
+    <section class="shard" aria-label="personal log">
+      <div class="cracks"></div>
+      <div class="topbar">
+        <div class="traffic"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <div class="term">Found/ops/private - orphaned</div>
+        <button id="mute" class="btn">sound off</button>
+      </div>
+
+      <div class="title">entry: last defiance - mournland genesis</div>
+      <div class="stamp">status: fragmented - checksum drift - memory bleed probable</div>
+      <div class="hr"></div>
+
+      <article id="log" class="log">
+        <div class="line glitch">
+          I told myself it was the last time I would stand against Eter. One more cut. One more refusal. No more altars made out of people.
+        </div>
+        <div class="line">
+          We were at the edge of the engine that should not have been built. A chorus of crystal, too bright to be called life, and the city that would become the Mournland waited to be unmade.
+        </div>
+        <div class="line">
+          I set the sigils. I counted the seconds between each hum. I thought I could take all the damage into me and end it clean.
+        </div>
+        <div class="line">
+          Medea ran. She did not ask. She did not negotiate. She took my wrist like the world was a rope and she would not let me fall through.
+        </div>
+        <div class="line">
+          We thought that was it. Two names that would go silent together. She said, if you go, I go, and I believed her because she had never lied.
+        </div>
+        <div class="line scream">
+          The light came up like a scream and the ground forgot how to be ground. I held the cut as long as the lattice would let me. I remember the taste of copper and roses. I remember Medea saying my name without any titles left.
+        </div>
+        <div class="line">
+          And then the world was a bowl of glass turned inside out. The map tore. The engine tore. We did not.
+        </div>
+        <div class="line">
+          I lived. Gods, I wish I had not. The price for that survival was to hear the hum keep her name without an answer.
+        </div>
+        <div class="line">
+          I would do anything to see her again, even if it meant looking for her inside the crystal lattice, even if it meant listening to the wrong voices for the right echo.
+        </div>
+        <div class="line aside">
+          This segment is outside the known system. If you found it, you are closer to the truth than I wanted you to be. Please be kind with what you do next.
+        </div>
+      </article>
+    </section>
+
+    <div class="footer">© <span id="yr"></span> shard remnant - amethyst division - out of network</div>
+  </div>
+
+  <!-- Audio -->
+  <audio id="bg" src="Medea.mp3" loop preload="auto"></audio>
+
+<script>
+  // year
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const audio = document.getElementById('bg');
+  const gate  = document.getElementById('gate');
+  const playBtn = document.getElementById('playBtn');
+  const muteBtn = document.getElementById('mute');
+
+  let muted = true;
+  audio.volume = 0.35;
+
+  function safePlay(){
+    audio.play().then(()=>{
+      muted = false;
+      muteBtn.textContent = 'sound on';
+      gate.style.display = 'none';
+    }).catch(()=>{
+      // keep gate up if blocked
+    });
+  }
+
+  playBtn.addEventListener('click', safePlay);
+  // any first user gesture also tries to start
+  window.addEventListener('pointerdown', ()=>{ if (gate.style.display !== 'none') safePlay(); }, { once:true });
+
+  muteBtn.addEventListener('click', ()=>{
+    muted = !muted;
+    if(muted){ audio.pause(); muteBtn.textContent = 'sound off'; }
+    else{ audio.play().catch(()=>{}); muteBtn.textContent = 'sound on'; }
+  });
+
+  // Subtle glitch pulses on log
+  const logEl = document.getElementById('log');
+  setInterval(()=>{
+    logEl.style.filter = 'url(#distort)';
+    setTimeout(()=>{ logEl.style.filter = 'none'; }, 240);
+  }, 4000 + Math.random()*2000);
+</script>
+</body>
+</html>
